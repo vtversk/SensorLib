@@ -1,10 +1,11 @@
 import pytest
 import sensorlib
+from dataclasses import dataclass
 from socket import *
-from sensor_data import TestConfig
+from sensor_data import TestConfig, ConfigTimeFields
 
-module = b'module1'
-app = b'block1'
+module = 'module1'
+app = 'block1'
 
 
 @pytest.fixture(scope='session', name='test_config')
@@ -13,9 +14,9 @@ def sensor_config() -> TestConfig:
     server_socket.bind(("127.0.0.1", 3333));
     server_socket.listen()
 
-    sensorlib.StateReporter_init(module, app)
+    sensorlib.StateReporter_init(module.encode('utf-8'), app.encode('utf-8'))
     (client_socket, client_addr) = server_socket.accept()
-    yield TestConfig(client_socket)
+    yield TestConfig(client_socket, ConfigTimeFields(module, app))
 
     sensorlib.StateReporter_stop()
     client_socket.close()

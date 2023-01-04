@@ -1,0 +1,676 @@
+============================= test session starts ==============================
+platform cygwin -- Python 3.9.10, pytest-6.2.5, py-1.11.0, pluggy-1.0.0
+benchmark: 3.4.1 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+rootdir: /cygdrive/C/VProjects/Arrival/TestTaskArrival/tests
+plugins: benchmark-3.4.1, env-0.6.2, mock-3.7.0, sugar-0.9.4
+collected 30 items
+
+test_ex1.py .FFFFFFF......FFFFFFFFFFFF....                               [100%]
+
+=================================== FAILURES ===================================
+____________________ TestSensor.test_sensor[sensor_entry1] _____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1ea490>
+sensor_entry = SensorIdEntry(val=b'-2.01', message_fields=TransmitFields(func='func2', desc='max_float_neg_unavail'), expected_result=<ExpectedStatus.STATE_OK: 0>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_UNAVAILABLE: 3>} != {'state': <ExpectedStatus.STATE_OK: 0>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry2] _____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1ac850>
+sensor_entry = SensorIdEntry(val=b'-2', message_fields=TransmitFields(func='func1', desc='min_int_ok'), expected_result=<ExpectedStatus.STATE_OK: 0>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 2 identical items, use -vv to show
+E         Differing items:
+E         {'desc': 'max_float_neg_unavail'} != {'desc': 'min_int_ok'}
+E         {'state': <ExpectedStatus.STATE_UNAVAILABLE: 3>} != {'state': <ExpectedStatus.STATE_OK: 0>}
+E         {'func': 'func2'} != {'func': 'func1'}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry3] _____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1cd4c0>
+sensor_entry = SensorIdEntry(val=b'-1.99', message_fields=TransmitFields(func='func1', desc='min_float_ok'), expected_result=<ExpectedStatus.STATE_OK: 0>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 2 identical items, use -vv to show
+E         Differing items:
+E         {'desc': 'max_float_neg_unavail'} != {'desc': 'min_float_ok'}
+E         {'state': <ExpectedStatus.STATE_UNAVAILABLE: 3>} != {'state': <ExpectedStatus.STATE_OK: 0>}
+E         {'func': 'func2'} != {'func': 'func1'}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry4] _____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1cdf10>
+sensor_entry = SensorIdEntry(val=b'-1', message_fields=TransmitFields(func='func1', desc='middle_int_neg_ok'), expected_result=<ExpectedStatus.STATE_OK: 0>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 2 identical items, use -vv to show
+E         Differing items:
+E         {'desc': 'max_float_neg_unavail'} != {'desc': 'middle_int_neg_ok'}
+E         {'state': <ExpectedStatus.STATE_UNAVAILABLE: 3>} != {'state': <ExpectedStatus.STATE_OK: 0>}
+E         {'func': 'func2'} != {'func': 'func1'}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry5] _____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1bbcd0>
+sensor_entry = SensorIdEntry(val=b'-0.5', message_fields=TransmitFields(func='func1', desc='middle_float_neg_ok'), expected_result=<ExpectedStatus.STATE_OK: 0>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 2 identical items, use -vv to show
+E         Differing items:
+E         {'desc': 'max_float_neg_unavail'} != {'desc': 'middle_float_neg_ok'}
+E         {'state': <ExpectedStatus.STATE_UNAVAILABLE: 3>} != {'state': <ExpectedStatus.STATE_OK: 0>}
+E         {'func': 'func2'} != {'func': 'func1'}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry6] _____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1aca90>
+sensor_entry = SensorIdEntry(val=b'-0.01', message_fields=TransmitFields(func='func1', desc='min_float_neg_ok'), expected_result=<ExpectedStatus.STATE_OK: 0>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 2 identical items, use -vv to show
+E         Differing items:
+E         {'desc': 'max_float_neg_unavail'} != {'desc': 'min_float_neg_ok'}
+E         {'state': <ExpectedStatus.STATE_UNAVAILABLE: 3>} != {'state': <ExpectedStatus.STATE_OK: 0>}
+E         {'func': 'func2'} != {'func': 'func1'}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry7] _____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1bb580>
+sensor_entry = SensorIdEntry(val=b'0', message_fields=TransmitFields(func='func1', desc='zero'), expected_result=<ExpectedStatus.STATE_OK: 0>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 2 identical items, use -vv to show
+E         Differing items:
+E         {'desc': 'max_float_neg_unavail'} != {'desc': 'zero'}
+E         {'state': <ExpectedStatus.STATE_UNAVAILABLE: 3>} != {'state': <ExpectedStatus.STATE_OK: 0>}
+E         {'func': 'func2'} != {'func': 'func1'}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry14] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff15d5b0>
+sensor_entry = SensorIdEntry(val=b'4', message_fields=TransmitFields(func='func2', desc='min_int_warn'), expected_result=<ExpectedStatus.STATE_WARNING: 1>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_ERROR: 2>} != {'state': <ExpectedStatus.STATE_WARNING: 1>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry15] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1c6760>
+sensor_entry = SensorIdEntry(val=b'4.01', message_fields=TransmitFields(func='func2', desc='min_float_warn'), expected_result=<ExpectedStatus.STATE_WARNING: 1>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_ERROR: 2>} != {'state': <ExpectedStatus.STATE_WARNING: 1>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry16] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1c6850>
+sensor_entry = SensorIdEntry(val=b'5', message_fields=TransmitFields(func='func2', desc='middle_int_warn'), expected_result=<ExpectedStatus.STATE_WARNING: 1>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_ERROR: 2>} != {'state': <ExpectedStatus.STATE_WARNING: 1>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry17] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1c6a90>
+sensor_entry = SensorIdEntry(val=b'5.5', message_fields=TransmitFields(func='func3', desc='middle_float_warn'), expected_result=<ExpectedStatus.STATE_WARNING: 1>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_ERROR: 2>} != {'state': <ExpectedStatus.STATE_WARNING: 1>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry18] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff15de50>
+sensor_entry = SensorIdEntry(val=b'6', message_fields=TransmitFields(func='func3', desc='max_int_warn'), expected_result=<ExpectedStatus.STATE_WARNING: 1>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_ERROR: 2>} != {'state': <ExpectedStatus.STATE_WARNING: 1>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry19] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1790a0>
+sensor_entry = SensorIdEntry(val=b'6.99', message_fields=TransmitFields(func='func3', desc='max_float_warn'), expected_result=<ExpectedStatus.STATE_WARNING: 1>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_ERROR: 2>} != {'state': <ExpectedStatus.STATE_WARNING: 1>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry20] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1881c0>
+sensor_entry = SensorIdEntry(val=b'7', message_fields=TransmitFields(func='func3', desc='min_int_error'), expected_result=<ExpectedStatus.STATE_ERROR: 2>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_WARNING: 1>} != {'state': <ExpectedStatus.STATE_ERROR: 2>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry21] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff188ac0>
+sensor_entry = SensorIdEntry(val=b'7.01', message_fields=TransmitFields(func='func3', desc='min_float_error'), expected_result=<ExpectedStatus.STATE_ERROR: 2>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_WARNING: 1>} != {'state': <ExpectedStatus.STATE_ERROR: 2>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry22] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1850d0>
+sensor_entry = SensorIdEntry(val=b'9', message_fields=TransmitFields(func='func3', desc='middle_int_error'), expected_result=<ExpectedStatus.STATE_ERROR: 2>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_WARNING: 1>} != {'state': <ExpectedStatus.STATE_ERROR: 2>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry23] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff15d7f0>
+sensor_entry = SensorIdEntry(val=b'9.5', message_fields=TransmitFields(func='func4', desc='middle_float_error'), expected_result=<ExpectedStatus.STATE_ERROR: 2>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_WARNING: 1>} != {'state': <ExpectedStatus.STATE_ERROR: 2>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry24] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1ac490>
+sensor_entry = SensorIdEntry(val=b'10', message_fields=TransmitFields(func='func4', desc='max_int_error'), expected_result=<ExpectedStatus.STATE_ERROR: 2>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_UNAVAILABLE: 3>} != {'state': <ExpectedStatus.STATE_ERROR: 2>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+____________________ TestSensor.test_sensor[sensor_entry25] ____________________
+
+self = <test_ex1.TestSensor object at 0x6fffff1886d0>
+sensor_entry = SensorIdEntry(val=b'10.99', message_fields=TransmitFields(func='func4', desc='max_float_error'), expected_result=<ExpectedStatus.STATE_ERROR: 2>)
+test_config = TestConfig(client_socket=<socket.socket fd=13, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 3333), raddr=('127.0.0.1', 52671)>, message_fields=ConfigTimeFields(module='module1', app='block1'))
+
+    @pytest.mark.parametrize('sensor_entry', sensor_data)
+    def test_sensor(self, sensor_entry: SensorIdEntry, test_config: TestConfig) -> None:
+        dict_config_fields = asdict(test_config.message_fields)
+        dict_transmit_fields = asdict(sensor_entry.message_fields)
+        expected_message = {**dict_config_fields,**dict_transmit_fields}
+        expected_message['state'] = sensor_entry.expected_result
+    
+        sensorlib.StateReporter_set_value(sensor_entry.val, sensor_entry.message_fields.func.encode('utf-8'),
+                                          sensor_entry.message_fields.desc.encode('utf-8'))
+    
+        time.sleep(1)
+        data = test_config.client_socket.recv(1024)
+    
+        #temporary take only the last message, since behavior is not clear
+        out_str = data.decode('utf-8', errors='ignore')
+        ind = out_str.rfind('{')
+        out_str = out_str[ind:]
+        rec_mes = json.loads(out_str)
+        rec_mes['state'] = ExpectedStatus(int(rec_mes['state']))
+>       assert(rec_mes == expected_message)
+E       AssertionError: assert {'app': 'bloc...module1', ...} == {'app': 'bloc...module1', ...}
+E         Omitting 4 identical items, use -vv to show
+E         Differing items:
+E         {'state': <ExpectedStatus.STATE_UNAVAILABLE: 3>} != {'state': <ExpectedStatus.STATE_ERROR: 2>}
+E         Use -v to get the full diff
+
+test_ex1.py:34: AssertionError
+=============================== warnings summary ===============================
+sensor_data.py:17
+  /cygdrive/C/VProjects/Arrival/TestTaskArrival/tests/sensor_data.py:17: PytestCollectionWarning: cannot collect test class 'TestConfig' because it has a __init__ constructor (from: test_ex1.py)
+    @dataclass
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+=========================== short test summary info ============================
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry1] - AssertionError: ...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry2] - AssertionError: ...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry3] - AssertionError: ...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry4] - AssertionError: ...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry5] - AssertionError: ...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry6] - AssertionError: ...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry7] - AssertionError: ...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry14] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry15] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry16] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry17] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry18] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry19] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry20] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry21] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry22] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry23] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry24] - AssertionError:...
+FAILED test_ex1.py::TestSensor::test_sensor[sensor_entry25] - AssertionError:...
+================== 19 failed, 11 passed, 1 warning in 30.78s ===================
