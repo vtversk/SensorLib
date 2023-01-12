@@ -38,7 +38,7 @@ sensor_data = [
         SensorIdEntry(b'-3', TransmitFields('func1', 'max_int_neg_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
         #to check border float value. 0.01 is selected as minimal value, beacuse if greater precision is required
         # it make sense to shift the whole range to 1000 times smaller values 
-        SensorIdEntry(b'-2.01', TransmitFields('func2', 'max_float_neg_unavail'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'-2.01', TransmitFields('func1', 'max_float_neg_unavail'), ExpectedStatus.STATE_OK),
         SensorIdEntry(b'-2', TransmitFields('func1', 'min_int_ok'), ExpectedStatus.STATE_OK),
         SensorIdEntry(b'-1.99', TransmitFields('func1', 'min_float_ok'), ExpectedStatus.STATE_OK),
         SensorIdEntry(b'-1', TransmitFields('func1', 'middle_int_neg_ok'), ExpectedStatus.STATE_OK),
@@ -70,6 +70,83 @@ sensor_data = [
         SensorIdEntry(b'11.01', TransmitFields('func4', 'min_float_pos_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
         SensorIdEntry(b'12', TransmitFields('func4', 'int_pos_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
         SensorIdEntry(b'12.5', TransmitFields('func4', 'float_pos_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+]
+
+sensor_multiple_data = [
+    #1st group of tests shall pass for the current state
+    [
+        SensorIdEntry(b'-3', TransmitFields('func1', 'max_int_neg_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+        SensorIdEntry(b'0.01', TransmitFields('func2', 'min_float_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'3.99', TransmitFields('func3', 'max_float_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'11', TransmitFields('func4', 'min_int_pos_uavail'), ExpectedStatus.STATE_UNAVAILABLE),
+    ],
+    [
+        SensorIdEntry(b'1', TransmitFields('func1', 'min_int_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'-3', TransmitFields('func2', 'max_int_neg_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+        SensorIdEntry(b'3', TransmitFields('func3', 'max_int_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'11.01', TransmitFields('func4', 'min_float_pos_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+    ],
+    [
+        SensorIdEntry(b'1.5', TransmitFields('func1', 'middle_float_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'2', TransmitFields('func2', 'middle_int_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'-3', TransmitFields('func3', 'max_int_neg_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+        SensorIdEntry(b'12', TransmitFields('func4', 'int_pos_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+    ],
+    #next tests are failing for the current state, but generally not intended to be negative tests
+    [
+        SensorIdEntry(b'-3', TransmitFields('func1', 'zero'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'0.01', TransmitFields('func2', 'max_float_neg_unavail'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'5.5', TransmitFields('func3', 'middle_float_warn'), ExpectedStatus.STATE_WARNING),
+        SensorIdEntry(b'9.5', TransmitFields('func4', 'middle_float_error'), ExpectedStatus.STATE_ERROR),
+    ],
+    [
+        SensorIdEntry(b'-2.01', TransmitFields('func1', 'min_int_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'1', TransmitFields('func2', 'min_int_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'6', TransmitFields('func3', 'max_int_warn'), ExpectedStatus.STATE_WARNING),
+        SensorIdEntry(b'10', TransmitFields('func4', 'max_int_error'), ExpectedStatus.STATE_ERROR)
+    ],
+    [
+        SensorIdEntry(b'-1.99', TransmitFields('func1', 'min_float_ok'), ExpectedStatus.STATE_OK),       
+        SensorIdEntry(b'1.5', TransmitFields('func2', 'middle_float_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'6', TransmitFields('func3', 'max_int_warn'), ExpectedStatus.STATE_WARNING),
+        SensorIdEntry(b'10.99', TransmitFields('func4', 'max_float_error'), ExpectedStatus.STATE_ERROR),
+    ],
+    [
+        SensorIdEntry(b'-1', TransmitFields('func1', 'middle_int_neg_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'2', TransmitFields('func2', 'middle_int_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'6.99', TransmitFields('func3', 'max_float_warn'), ExpectedStatus.STATE_WARNING),
+        SensorIdEntry(b'11', TransmitFields('func4', 'min_int_pos_uavail'), ExpectedStatus.STATE_UNAVAILABLE),
+    ],
+    [
+        SensorIdEntry(b'-0.5', TransmitFields('func1', 'middle_float_neg_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'3', TransmitFields('func2', 'max_int_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'7', TransmitFields('func3', 'min_int_error'), ExpectedStatus.STATE_ERROR),
+        SensorIdEntry(b'11.01', TransmitFields('func4', 'min_float_pos_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+    ],
+    [
+        SensorIdEntry(b'-0.01', TransmitFields('func1', 'min_float_neg_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'3.99', TransmitFields('func2', 'max_float_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'7.01', TransmitFields('func3', 'min_float_error'), ExpectedStatus.STATE_ERROR),
+        SensorIdEntry(b'12', TransmitFields('func4', 'int_pos_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+    ],
+    [
+        SensorIdEntry(b'0', TransmitFields('func1', 'zero'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'4', TransmitFields('func2', 'min_int_warn'), ExpectedStatus.STATE_WARNING),
+        SensorIdEntry(b'9', TransmitFields('func3', 'middle_int_error'), ExpectedStatus.STATE_ERROR),
+        SensorIdEntry(b'12.5', TransmitFields('func4', 'float_pos_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+    ],
+    [
+        SensorIdEntry(b'0.01', TransmitFields('func1', 'min_float_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'4.01', TransmitFields('func2', 'min_float_warn'), ExpectedStatus.STATE_WARNING),
+        SensorIdEntry(b'9.5', TransmitFields('func3', 'middle_float_error'), ExpectedStatus.STATE_ERROR),
+        SensorIdEntry(b'-3', TransmitFields('func4', 'max_int_neg_unavail'), ExpectedStatus.STATE_UNAVAILABLE),
+    ],
+    [
+        SensorIdEntry(b'1', TransmitFields('func1', 'min_int_pos_ok'), ExpectedStatus.STATE_OK),
+        SensorIdEntry(b'5', TransmitFields('func2', 'middle_int_warn'), ExpectedStatus.STATE_WARNING),
+        SensorIdEntry(b'10', TransmitFields('func3', 'max_int_error'), ExpectedStatus.STATE_ERROR),
+        SensorIdEntry(b'-2.01', TransmitFields('func4', 'max_float_neg_unavail'), ExpectedStatus.STATE_OK),
+    ]
 ]
 
    

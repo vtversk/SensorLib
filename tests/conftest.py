@@ -3,6 +3,7 @@ import sensorlib
 from dataclasses import dataclass
 from socket import *
 from sensor_data import TestConfig, ConfigTimeFields
+import time
 
 module = 'module1'
 app = 'block1'
@@ -15,7 +16,10 @@ def sensor_config() -> TestConfig:
     server_socket.listen()
 
     sensorlib.StateReporter_init(module.encode('utf-8'), app.encode('utf-8'))
+    time.sleep(1)
     (client_socket, client_addr) = server_socket.accept()
+    data = client_socket.recv(1024)
+
     yield TestConfig(client_socket, ConfigTimeFields(module, app))
 
     sensorlib.StateReporter_stop()
